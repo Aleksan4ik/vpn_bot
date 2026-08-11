@@ -7,7 +7,7 @@ load_dotenv()
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("🔐 Привет! VPN Bot!")
+    await update.message.reply_text("✅ VPN Bot работает!")
 
 def main():
     app = Application.builder().token(TOKEN).build()
