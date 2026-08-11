@@ -2,7 +2,7 @@ import os
 import logging
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes, MessageHandler, filters
 
 load_dotenv()
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -90,7 +90,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data['support_mode'] = True
     
     elif query.data == "bon":
-        bonuses = users_data[user_id]['bonuses']
+        bonuses = users_data.get(user_id, {}).get('bonuses', 0)
         text = f"""
 🎁 **МОИ БОНУСЫ**
 
@@ -111,15 +111,15 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
     
     elif query.data == "ref":
-        ref_code = users_data[user_id]['ref_code']
-        bonuses = users_data[user_id]['bonuses']
+        ref_code = users_data.get(user_id, {}).get('ref_code', f'VPN{user_id}')
+        bonuses = users_data.get(user_id, {}).get('bonuses', 0)
         text = f"""
 👥 **РЕФЕРАЛЬНАЯ СИСТЕМА**
 
 Твой код: `{ref_code}`
 
 **Как работает:**
-1️⃣ Поделись кодом с друзьями
+1 Поделись кодом с друзьями
 2️⃣ Друг купит подписку
 3️⃣ Ты получи 10% от его покупки!
 
